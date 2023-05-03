@@ -192,7 +192,7 @@ git checkout -f
 
 2. Una vez tenemos nuestro token, creamos un proyecto usando la API de Gitlab, especificando el token y la url del servidor donde tenemos instalado Gitlab:
 ```sh
-curl --request POST --header "PRIVATE-TOKEN: glpat-iv_SEf-2bGfwknny_FLa" \
+curl --request POST --header "PRIVATE-TOKEN: <token>" \
      --header "Content-Type: application/json" --data '{
         "name": "prueba", "description": "Proyecto Prueba", "path": "prueba",
         "initialize_with_readme": "true"}' \
