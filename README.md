@@ -95,7 +95,6 @@ sudo usermod -a -G cvs cvsuser
 sudo apt install cvs
 export CVSROOT=:pserver:<usuario>@<ip_servidor>:<ruta_repositorio>
 cvs login
-cvs checkout .
 ```
 ![cap6](/images/cap-6.PNG)
 
@@ -106,8 +105,25 @@ echo 'export CVSROOT=:pserver:cvsuser@192.168.82.3:2401/usr/local/projecto1' >> 
 
 ## 3. Darle contenido al repositorio
 
+1. Importamos un nuevo módulo (directorio) que será la raíz del projecto
+```sh
+cvs import -m "Import inicial" <nombre_modulo> <autor> <rama>
+```
 
+2. Después de realizar el import, hacemos un cvs checkout del módulo anterior para ir registrando los cambios que hagamos
+```sh
+cvs checkout myapp
+```
 
+3. Para añadir nuevos archivos, usamos el comando cvs add, especificando un mensaje de manera opcional
+```sh
+cvs add index.html -m "archivo index.html"
+```
+
+4. Si hemos realizado modificaciones a algunos archivos, para hacer un commit de esos cambios al repositorio usamos el comando cvs commit
+```sh
+cvs commit
+```
 
 
 ## 4 y 5. Instalación de la herramienta cvs-fast-export
