@@ -104,7 +104,6 @@ echo 'export CVSROOT=:pserver:cvsuser@192.168.82.3:2401/usr/local/projecto1' >> 
 ```
 
 ## 3. Darle contenido al repositorio
-
 1. Importamos un nuevo módulo (directorio) que será la raíz del projecto
 ```sh
 cvs import -m "Import inicial" <nombre_modulo> <autor> <rama>
@@ -124,7 +123,6 @@ cvs add index.html -m "archivo index.html"
 ```sh
 cvs commit
 ```
-
 
 ## 4 y 5. Instalación de la herramienta cvs-fast-export
 1. Clonamos el repositorio del projecto
@@ -158,14 +156,13 @@ find . | cvs-fast-export > ~/stream.fe
 ```
 
 ## 6. Instalación de Gitlab en Docker
-
 1. Primero, instalamos Docker siguiendo los pasos de la [documentación oficial](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository)
 
 2. (Opcional) Para no tener que ejecutar los comandos de docker con sudo, seguimos [estos pasos](https://docs.docker.com/engine/install/linux-postinstall/)
 
 3. Ahora, procedemos a instalar Gitlab mediante Docker siguiendo su documentación oficial. Utilizaremos el método de [docker-compose](https://docs.gitlab.com/ee/install/docker.html#install-gitlab-using-docker-compose)
 
-4. Ejecutamos el [docker-compose.yaml] del repositorio mediante el comando
+4. Ejecutamos el [docker-compose.yaml](/docker-compose.yaml) del repositorio mediante el comando
 ```sh
 docker compose up -d
 ```
@@ -178,7 +175,6 @@ docker exec -it gitlab-web-1 grep 'Password:' /etc/gitlab/initial_root_password
 
 
 ## 7. Migrar el repositorio de cvs a git
-
 1. Creamos la carpeta que será la raíz del repositorio migrado
 ```sh
 mkdir repositorio && cd repositorio
@@ -202,15 +198,22 @@ git checkout -f
 ![cap-8](/images//cap-8.PNG)
 
 ## 8. Automatización del proceso con un script de Python
-
-1. Primero creamos un token en Gitlab para poder usar su API
-![cap-10](/images/cap-10.png)
-
-2. Una vez tenemos nuestro token, creamos un proyecto usando la API de Gitlab, especificando el token y la url del servidor donde tenemos instalado Gitlab:
+1. Para que el script de Python funcione correctamente, antes necesitamos crear una clave SSH para autenticarnos con Gitlab. En esta práctica, vamos a crear una clave ED25519, siguiendo los pasos de la [documentación oficial](https://docs.gitlab.com/ee/user/ssh.html) de Gitlab
 ```sh
-curl --request POST --header "PRIVATE-TOKEN: <token>" \
-     --header "Content-Type: application/json" --data '{
-        "name": "prueba", "description": "Proyecto Prueba", "path": "prueba",
-        "initialize_with_readme": "true"}' \
-     --url 'http://localhost:8080/api/v4/projects/'
+ssh-keygen -t ed25519 -C '<comentario>'
 ```
+
+2. El comando anterior ha generado una clave privada y pública en el directorio /home/[usuario]/.ssh. Copiamos el contenido del archivo 'id_ed25519.pub'
+```sh
+cat ~/.ssh/id_ed25519.pub
+```
+
+3. Desde Gitlab, nos vamos a Preferences > SSH Keys y añadimos nuestra clave pública
+![cap-11](/images//cap-10.png)
+
+4. Por último, ejecutamos el script y comprobamos que el repositorio se ha subido a Gitlab
+```sh
+python3 script.py
+```
+
+![cap-12](/images//cap-11.PNG)
